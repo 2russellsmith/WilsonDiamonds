@@ -6,25 +6,30 @@ clear = lambda: os.system('clear')
 clear()
 
 def mainMenu():
-    clear()
-    print("1) Print a diamond")
-    print("2) Sub Menu")
-    print("3) Quit")
-    selection = input("Select: ")
-    valid = 1
-    while valid != 0:
+    broken = 0
+    while 1:
+        clear()
+        print("1) Print a diamond")
+        print("2) Sub Menu")
+        print("3) Quit")
+        if broken:
+            selection = input("Invalid selection. Select: ")
+        else:
+            selection = input("Select: ")
+
         if selection == '1':
             printDiamond()
-            valid = 0
+            broken = 0
         elif selection == '2':
             subMenu()
-            valid = 0
+            broken = 0
         elif selection == '3':
-            valid = 0
+            break
         else:
-            selection = input("Invalid selection. Select: ")
+            broken = 1
 
 def selectall():
+    clear()
     conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='root', db='WilsonDiamonds')
     cur = conn.cursor()
     cur.execute("SELECT * FROM inventory")
@@ -35,26 +40,28 @@ def selectall():
     input("Found...")
 
 def subMenu():
-    clear()
-    print("1) Print a diamond")
-    print("2) Select All Rings")
-    print("m) Main menu")
-    selection = input("Select: ")
-    valid = 1
-    while (valid != 0):
-        if (selection == '1' or selection == '2' or selection == 'm'):
-            valid = 0
-        else:
+    broken = 0
+    while 1:
+        clear()
+        print("1) Print a diamond")
+        print("2) Select All Rings")
+        print("m) Main menu")
+        if broken:
             selection = input("Invalid selection. Select: ")
+        else:
+            selection = input("Select: ")
 
-    if (selection == '1'):
-        printDiamond()
-    elif selection == '2':
-        selectall()
-        valid = 0
-    elif selection == 'm':
-        mainMenu()
-        valid = 0
+        if (selection == '1'):
+            printDiamond()
+            broken = 0
+        elif selection == '2':
+            selectall()
+            broken = 0
+        elif selection == 'm':
+            break
+        else:
+            broken = 1
+
 
 def printDiamond():
     clear()
@@ -62,6 +69,5 @@ def printDiamond():
     diamond = f.read()
     print(diamond)
     input("Done...")
-    mainMenu()
 
 mainMenu()
