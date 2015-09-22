@@ -7,7 +7,8 @@ clear()
 
 def mainMenu():
     broken = 0
-    while 1:
+    quitting = 0
+    while quitting == 0:
         clear()
         print("1) Print a diamond")
         print("2) Sub Menu")
@@ -24,7 +25,7 @@ def mainMenu():
             subMenu()
             broken = 0
         elif selection == '3':
-            break
+            quitting = 1
         else:
             broken = 1
 
@@ -39,12 +40,25 @@ def selectall():
     conn.close()
     input("Found...")
 
+def addRing():
+    conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='root', db='WilsonDiamonds')
+    cur = conn.cursor()
+    name = input("Ring name: ")
+    cur.execute("INSERT INTO inventory (name) VALUES ('%s')" % name)
+    cur.close()
+    conn.commit()
+    conn.close()
+    input("Added...")
+
+
+
 def subMenu():
     broken = 0
     while 1:
         clear()
         print("1) Print a diamond")
         print("2) Select All Rings")
+        print("3) Add A Ring")
         print("m) Main menu")
         if broken:
             selection = input("Invalid selection. Select: ")
@@ -57,11 +71,13 @@ def subMenu():
         elif selection == '2':
             selectall()
             broken = 0
+        elif selection == '3':
+            addRing()
+            broken = 0
         elif selection == 'm':
             break
         else:
             broken = 1
-
 
 def printDiamond():
     clear()
